@@ -111,6 +111,11 @@
     width: 100%;
   }
 
+  input.input-field[type="date"]::-webkit-calendar-picker-indicator,
+  input.input-field[type="time"]::-webkit-calendar-picker-indicator {
+    margin-left: 0;
+  }
+
   .container-app {
     @apply max-w-7xl mx-auto px-8;
   }
