@@ -9,7 +9,7 @@ export default function PublicLayout({
   return (
     <div className="overflow-x-hidden max-w-[100vw]">
       <Header />
-      <main id="main-content" className="min-h-screen pt-16">{children}</main>
+      <main id="main-content" className="pt-16">{children}</main>
       <Footer />
     </div>
   )
