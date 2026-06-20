@@ -159,7 +159,7 @@ export function TopBar({ variant, fullName, email, profileHref, theme, onToggleT
       {/* Search — order-6 w-full on mobile, order-2 flex-1 at tablet, order-1 w-[45%] at desktop */}
       <div
         ref={searchRef}
-        className="w-full md:flex-1 lg:flex-1 xl:w-[45%] xl:flex-none order-6 md:order-2 lg:order-1 mt-2 md:mt-0 lg:mt-0"
+        className="relative w-full md:flex-1 lg:flex-1 xl:w-[45%] xl:flex-none order-6 md:order-2 lg:order-1 mt-2 md:mt-0 lg:mt-0"
       >
         <div className="relative">
           <input
