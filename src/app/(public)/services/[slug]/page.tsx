@@ -9,7 +9,7 @@ export default function ServiceCategoryPage({
     .join(' ')
 
   return (
-    <main className="section-padding">
+    <main className="pt-6 pb-24 md:pt-20 lg:pt-28 px-20">
       <div className="container-app">
         <p className="eyebrow mb-2">Services</p>
         <h1 className="text-4xl font-display font-bold mb-8">

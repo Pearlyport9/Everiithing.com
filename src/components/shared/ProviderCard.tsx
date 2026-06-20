@@ -10,7 +10,7 @@ export function ProviderCard({ name, rating, category, lga, totalJobs }: Provide
   return (
     <div className="service-card">
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center text-lg font-bold text-neutral-500">
+        <div className="w-12 h-12 rounded-full bg-token-surfaceVariant flex items-center justify-center text-lg font-bold text-token-onSurfaceVariant">
           {name.charAt(0)}
         </div>
         <div>
@@ -18,7 +18,7 @@ export function ProviderCard({ name, rating, category, lga, totalJobs }: Provide
           <span className="verified-badge">Verified</span>
         </div>
       </div>
-      <div className="text-sm text-neutral-500 space-y-1">
+      <div className="text-sm text-token-onSurfaceVariant space-y-1">
         <p>{category}</p>
         <p>Serves: {lga}</p>
         <p>{totalJobs} jobs completed</p>

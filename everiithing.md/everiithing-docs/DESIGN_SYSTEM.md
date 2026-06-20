@@ -46,52 +46,7 @@
 
 ---
 
-## Colour Palette
-
-### Brand Colours
-```css
-/* Primary — Deep Navy */
---color-navy-950: #0D1021;
---color-navy-900: #1A1A2E;   /* primary background */
---color-navy-800: #16213E;   /* secondary dark */
---color-navy-700: #1F2C52;
---color-navy-600: #2A3F73;
-
-/* Accent — Vermillion Red */
---color-accent-600: #C73B2E;
---color-accent-500: #E94560;  /* primary accent */
---color-accent-400: #F06070;
---color-accent-300: #F58C98;
-
-/* Neutral */
---color-neutral-950: #0A0A0B;
---color-neutral-900: #1A1A1A;
---color-neutral-700: #4A4A6A;
---color-neutral-500: #7A7A9A;
---color-neutral-300: #C4C4D4;
---color-neutral-100: #F0F0F8;
---color-neutral-50:  #F8F8FC;
-
-/* Semantic */
---color-success: #1A7B4B;
---color-warning: #E97B00;
---color-error:   #DC2626;
---color-info:    #1D6FAA;
-```
-
-### Colour Usage Rules
-| Use | Colour |
-|-----|--------|
-| Page background (light) | `--color-neutral-50` |
-| Page background (dark sections) | `--color-navy-900` |
-| Primary text | `--color-navy-900` |
-| Secondary text | `--color-neutral-700` |
-| Muted text | `--color-neutral-500` |
-| Primary CTA button | `--color-accent-500` |
-| Verified badge | `--color-success` |
-| Eyebrow labels | `--color-accent-500` |
-| Nav links | `--color-navy-900` |
-| Nav CTA | `--color-navy-900` (dark bg, white text) |
+|
 
 ---
 

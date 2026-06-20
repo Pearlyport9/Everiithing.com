@@ -6,9 +6,9 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export function Button({ variant = 'primary', children, className = '', ...props }: ButtonProps) {
   const base = 'px-7 py-3 rounded-full font-semibold text-base transition-all duration-base focus:outline-none focus:ring-2 focus:ring-offset-2 inline-flex items-center justify-center'
   const variants = {
-    primary: 'bg-accent-500 text-white hover:bg-accent-600 hover:shadow-lg focus:ring-accent-500',
-    secondary: 'bg-transparent border-2 border-navy-900 text-navy-900 hover:bg-navy-900 hover:text-white focus:ring-navy-900',
-    dark: 'bg-navy-900 text-white hover:bg-navy-800 focus:ring-navy-900',
+    primary: 'bg-token-tertiary text-token-onTertiary hover:brightness-110 hover:shadow-lg focus:ring-token-tertiary',
+    secondary: 'bg-transparent border-2 border-token-primary text-token-primary hover:bg-token-primary hover:text-token-onPrimary focus:ring-token-primary',
+    dark: 'bg-token-inverseSurface text-token-inverseOnSurface hover:brightness-125 focus:ring-token-inverseSurface',
   }
 
   return (

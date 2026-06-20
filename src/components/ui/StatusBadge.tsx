@@ -8,6 +8,7 @@ interface StatusBadgeProps {
 export function StatusBadge({ status }: StatusBadgeProps) {
   const map: Record<string, { label: string; variant: 'success' | 'warning' | 'error' | 'info' | 'default' }> = {
     pending: { label: 'Pending', variant: 'warning' },
+    pending_quote: { label: 'Awaiting Quote', variant: 'warning' },
     confirmed: { label: 'Confirmed', variant: 'info' },
     provider_assigned: { label: 'Provider Assigned', variant: 'info' },
     in_progress: { label: 'In Progress', variant: 'info' },

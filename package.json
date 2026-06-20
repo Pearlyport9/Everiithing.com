@@ -10,22 +10,31 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.5",
+    "@supabase/supabase-js": "^2",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.0",
+    "autoprefixer": "^10.5.0",
+    "bcryptjs": "^2.4.3",
+    "lucide-react": "^0.468",
     "next": "14.2.35",
+    "nodemailer": "^8.0.10",
     "react": "^18",
     "react-dom": "^18",
-    "@supabase/supabase-js": "^2",
-    "@supabase/ssr": "^0.5",
-    "lucide-react": "^0.468",
-    "resend": "^4"
+    "resend": "^4",
+    "sanitize-html": "^2.13.1"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.0",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/sanitize-html": "^2.16.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.35",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.35"
+    "typescript": "^5"
   }
 }

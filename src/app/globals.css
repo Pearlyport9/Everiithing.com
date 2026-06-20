@@ -1,3 +1,6 @@
+@import '../../color-tokens.css';
+@import '../styles/tokens.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,10 +12,18 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+    -webkit-user-drag: none;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   body {
     font-family: 'Satoshi', sans-serif;
+    overscroll-behavior: none;
+    -webkit-user-drag: none;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -21,49 +32,75 @@
 }
 
 @layer components {
+  .hover-underline {
+    position: relative;
+  }
+  .hover-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--md-primary);
+    transform: scaleX(0);
+    transition: transform 200ms ease;
+  }
+  .hover-underline:hover::after,
+  .hover-underline:focus-visible::after {
+    transform: scaleX(1);
+  }
+  header .hover-underline::after {
+    background-color: var(--md-primary-container);
+  }
   .btn-primary {
-    @apply bg-accent-500 text-white px-7 py-3 rounded-full font-semibold text-base
+    @apply bg-token-primary text-token-onPrimary px-7 py-3 rounded-full font-semibold text-base
            transition-all duration-base
-           hover:bg-accent-600 hover:shadow-lg
-           focus:outline-none focus:ring-2 focus:ring-accent-500 focus:ring-offset-2;
+           hover:brightness-110 hover:shadow-lg
+           focus:outline-none focus:ring-2 focus:ring-token-primary focus:ring-offset-2;
   }
 
   .btn-secondary {
-    @apply bg-transparent border-2 border-navy-900 text-navy-900 px-7 py-3 rounded-full font-semibold
+    @apply bg-transparent border-2 border-token-primary text-token-primary px-7 py-3 rounded-full font-semibold
            transition-all duration-base
-           hover:bg-navy-900 hover:text-white
-           focus:outline-none focus:ring-2 focus:ring-navy-900 focus:ring-offset-2;
+           hover:bg-token-primary hover:text-token-onPrimary
+           focus:outline-none focus:ring-2 focus:ring-token-primary focus:ring-offset-2;
   }
 
   .btn-dark {
-    @apply bg-navy-900 text-white px-7 py-3 rounded-full font-semibold
+    @apply bg-token-inverseSurface text-token-inverseOnSurface px-7 py-3 rounded-full font-semibold
            transition-all duration-base
-           hover:bg-navy-800
-           focus:outline-none focus:ring-2 focus:ring-navy-900 focus:ring-offset-2;
+           hover:brightness-125
+           focus:outline-none focus:ring-2 focus:ring-token-inverseSurface focus:ring-offset-2;
   }
 
   .eyebrow {
-    @apply text-sm font-semibold tracking-widest uppercase text-accent-500;
+    @apply text-sm font-semibold tracking-widest uppercase text-token-tertiary;
   }
 
   .verified-badge {
-    @apply bg-success-light text-success text-xs font-semibold px-2.5 py-1 rounded-full inline-flex items-center gap-1;
+    @apply bg-token-primaryContainer text-token-onPrimaryContainer text-xs font-semibold px-2.5 py-1 rounded-full inline-flex items-center gap-1;
   }
 
   .service-card {
-    @apply rounded-xl p-6 bg-white shadow-sm border border-neutral-100
+    @apply rounded-xl p-6 bg-token-surface shadow-sm border border-token-outlineVariant
            transition-all duration-base
            hover:shadow-lg hover:-translate-y-0.5;
   }
 
   .service-card--active {
-    @apply bg-navy-900 text-white;
+    @apply bg-token-primary text-token-onPrimary;
   }
 
   .input-field {
-    @apply w-full border-2 border-neutral-300 rounded-md px-4 py-3 text-base text-navy-900 bg-white
+    @apply w-full border-2 border-token-outline rounded-md px-4 py-[14px] text-[15px] text-token-onSurface
            transition-colors duration-fast
-           focus:border-accent-500 focus:outline-none focus:ring-0;
+           focus:border-token-primary focus:outline-none focus:ring-0;
+    background-color: var(--color-surfaceContainerLowest);
+  }
+
+  .input-field:focus {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 12%, transparent);
   }
 
   .container-app {
@@ -73,11 +110,97 @@
   .section-padding {
     @apply py-24 px-20;
   }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer components {
+  .trust-card-wrapper {
+    height: 300px;
+  }
+
+  .trust-card-back {
+    top: 0;
+    left: 0;
+  }
+
+  .trust-card-front {
+    bottom: -40px;
+    right: 0;
+  }
 }
 
 @layer utilities {
+  .scrollable-x {
+    touch-action: pan-x !important;
+    overscroll-behavior-x: none !important;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-scroll {
+    animation: scroll 30s linear infinite;
+  }
+  .animate-scroll:hover {
+    animation-play-state: paused;
+  }
+}
+
+@media (max-width: 430px) {
+  .trust-card-wrapper {
+    height: 280px;
+  }
+
+  .trust-card-back {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin: 0;
+    width: 100% !important;
+    height: 280px !important;
+  }
+
+  .trust-card-front {
+    display: none;
+  }
+
+  .achievement-status-card {
+    display: none;
+  }
+
+  .service-carousel-arrow {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .trust-card-wrapper {
+    height: 340px;
+  }
+
+  .trust-card-front {
+    bottom: -40px;
+    right: -8px;
   }
 }

@@ -1,0 +1,40 @@
+:root {
+  --md-primary: var(--color-primary);
+  --md-on-primary: var(--color-onPrimary);
+  --md-primary-container: var(--color-primaryContainer);
+  --md-on-primary-container: var(--color-onPrimaryContainer);
+  --md-secondary: var(--color-secondary);
+  --md-on-secondary: var(--color-onSecondary);
+  --md-secondary-container: var(--color-secondaryContainer);
+  --md-on-secondary-container: var(--color-onSecondaryContainer);
+  --md-tertiary: var(--color-tertiary);
+  --md-on-tertiary: var(--color-onTertiary);
+  --md-tertiary-container: var(--color-tertiaryContainer);
+  --md-on-tertiary-container: var(--color-onTertiaryContainer);
+  --md-error: var(--color-error);
+  --md-on-error: var(--color-onError);
+  --md-error-container: var(--color-errorContainer);
+  --md-on-error-container: var(--color-onErrorContainer);
+  --md-background: var(--color-background);
+  --md-on-background: var(--color-onBackground);
+  --md-surface: #FFFFFF;
+  --md-on-surface: var(--color-onSurface);
+  --md-surface-variant: var(--color-surfaceVariant);
+  --md-on-surface-variant: var(--color-onSurfaceVariant);
+  --md-outline: var(--color-outline);
+  --md-outline-variant: var(--color-outlineVariant);
+  --md-inverse-surface: var(--color-inverseSurface);
+  --md-inverse-on-surface: var(--color-inverseOnSurface);
+  --md-inverse-primary: var(--color-inversePrimary);
+}
+
+[data-theme="dark"] {
+  --md-surface: var(--color-surface);
+  --md-on-surface: var(--color-onSurface);
+  --md-surface-variant: var(--color-surfaceVariant);
+  --md-on-surface-variant: var(--color-onSurfaceVariant);
+  --md-outline: var(--color-outline);
+  --md-outline-variant: var(--color-outlineVariant);
+  --md-inverse-surface: var(--color-inverseSurface);
+  --md-inverse-on-surface: var(--color-inverseOnSurface);
+}

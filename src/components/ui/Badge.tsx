@@ -5,11 +5,11 @@ interface BadgeProps {
 
 export function Badge({ variant = 'default', children }: BadgeProps) {
   const styles = {
-    default: 'bg-neutral-100 text-neutral-700',
-    success: 'bg-success-light text-success',
-    warning: 'bg-warning/10 text-warning',
-    error: 'bg-error/10 text-error',
-    info: 'bg-info/10 text-info',
+    default: 'bg-token-surfaceVariant text-token-onSurfaceVariant',
+    success: 'bg-token-primaryContainer text-token-onPrimaryContainer',
+    warning: 'bg-token-secondary/10 text-token-secondary',
+    error: 'bg-token-error/10 text-token-error',
+    info: 'bg-token-primary/10 text-token-primary',
   }
 
   return (

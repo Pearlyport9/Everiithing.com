@@ -1,12 +1,14 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
+import { ArrowRight, Menu, X } from 'lucide-react'
+import { useState } from 'react'
 
 const navLinks = [
   { href: '/services', label: 'Services' },
   { href: '/how-it-works', label: 'How It Works' },
+  { href: '/faq', label: 'FAQs' },
+  { href: '/about', label: 'About' },
   { href: '/become-a-provider', label: 'Become a Provider' },
 ]
 
@@ -14,69 +16,81 @@ export default function Header() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="bg-navy-900 text-white sticky top-0 z-50">
-      <div className="container-app flex items-center justify-between h-16">
-        <Link href="/" className="font-display font-extrabold text-xl tracking-tight">
-          Everiithing<span className="text-accent-500">.</span>com
+    <header
+      className="fixed top-0 z-50 inset-x-0"
+      style={{ backgroundColor: 'var(--md-primary)', borderBottom: '1px solid var(--md-primary-container)' }}
+    >
+      <div className="w-full md:max-w-7xl md:mx-auto px-6 md:px-8 flex items-center justify-between h-16">
+        <Link href="/" aria-label="Home" className="flex items-center">
+          <img src="/logo.svg" alt="Everiithing" className="h-9 w-auto" />
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-8" aria-label="Primary navigation">
           {navLinks.map((link) => (
             <Link
-              key={link.href}
+              key={link.label}
               href={link.href}
-              className="text-neutral-300 hover:text-white transition-colors text-sm font-medium"
+              className="text-sm font-medium transition-colors duration-200 inline-flex items-center gap-1 hover-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--md-primary-container)] focus-visible:rounded"
+              style={{ color: 'var(--md-on-primary)' }}
             >
               {link.label}
             </Link>
           ))}
-          <div className="flex items-center gap-3 ml-4">
-            <Link href="/login" className="text-sm font-medium hover:text-accent-400 transition-colors">
-              Log in
-            </Link>
-            <Link href="/signup" className="btn-primary text-sm !py-2 !px-5">
-              Get Started
+          <div className="ml-4">
+            <Link
+              href="/signup"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full font-semibold text-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:brightness-110 active:scale-[0.97]"
+              style={{ backgroundColor: 'var(--md-tertiary)', color: 'var(--md-on-tertiary)' }}
+            >
+              Get Started <ArrowRight size={16} />
             </Link>
           </div>
         </nav>
 
-        <button
-          className="md:hidden p-2"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
+        <button className="lg:hidden p-2.5" onClick={() => setOpen(!open)} aria-expanded={open} aria-label="Toggle menu" style={{ color: 'var(--md-on-primary)' }}>
           {open ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-navy-700">
-          <div className="container-app py-4 space-y-3">
-            {navLinks.map((link) => (
+        <div
+          className="fixed inset-0 z-40 lg:hidden flex flex-col"
+          style={{ backgroundColor: 'var(--md-primary)', top: '64px' }}
+          onClick={() => setOpen(false)}
+          onKeyDown={(e) => { if (e.key === 'Escape') setOpen(false) }}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation menu"
+        >
+          <div
+            className="flex flex-col px-6 pt-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-col items-center gap-6">
+              {navLinks.map((link) => (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className="relative group text-lg font-medium flex items-center whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--md-primary-container)] focus-visible:rounded"
+                    style={{ color: 'var(--md-on-primary)' }}
+                    onClick={() => setOpen(false)}
+                    onTouchStart={() => {}}
+                  >
+                    <span className="text-center">{link.label}</span>
+                    <span className="absolute bottom-0 left-0 h-0.5 bg-[var(--md-tertiary)] w-0 transition-all duration-100 ease group-hover:w-full group-active:w-full" />
+                  </Link>
+              ))}
+            </div>
+            <div className="mt-8 pb-8">
               <Link
-                key={link.href}
-                href={link.href}
-                className="block text-neutral-300 hover:text-white transition-colors py-1"
+                href="/signup"
+                className="w-full inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-semibold text-base transition-all duration-200 active:scale-[0.97]"
+                style={{ backgroundColor: 'var(--md-tertiary)', color: 'var(--md-on-tertiary)' }}
                 onClick={() => setOpen(false)}
               >
-                {link.label}
+                Get Started <ArrowRight size={18} />
               </Link>
-            ))}
-            <hr className="border-navy-700" />
-            <Link
-              href="/login"
-              className="block text-neutral-300 hover:text-white transition-colors py-1"
-              onClick={() => setOpen(false)}
-            >
-              Log in
-            </Link>
-            <Link
-              href="/signup"
-              className="block text-accent-400 font-medium py-1"
-              onClick={() => setOpen(false)}
-            >
-              Get Started
-            </Link>
+            </div>
           </div>
         </div>
       )}

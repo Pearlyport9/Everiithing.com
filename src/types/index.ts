@@ -2,6 +2,7 @@ export type UserRole = 'customer' | 'provider' | 'admin'
 
 export type BookingStatus =
   | 'pending'
+  | 'pending_quote'
   | 'confirmed'
   | 'provider_assigned'
   | 'in_progress'
