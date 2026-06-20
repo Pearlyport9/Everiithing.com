@@ -10,6 +10,18 @@ export function Input({ label, error, className = '', id: externalId, ...props }
   const inputId = externalId || (label ? fallbackId : undefined)
   const errorId = error && inputId ? `${inputId}-error` : undefined
 
+  const isDateOrTime = props.type === 'date' || props.type === 'time'
+
+  const input = (
+    <input
+      id={inputId}
+      aria-invalid={error ? true : undefined}
+      aria-describedby={errorId}
+      className={`input-field ${error ? 'border-token-error' : ''} ${className}`}
+      {...props}
+    />
+  )
+
   return (
     <div>
       {label && (
@@ -17,13 +29,11 @@ export function Input({ label, error, className = '', id: externalId, ...props }
           {label}
         </label>
       )}
-      <input
-        id={inputId}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={errorId}
-        className={`input-field ${error ? 'border-token-error' : ''} ${className}`}
-        {...props}
-      />
+      {isDateOrTime ? (
+        <div className={`input-field-wrapper ${error ? 'border-token-error' : ''}`}>
+          {input}
+        </div>
+      ) : input}
       {error && <p id={errorId} role="alert" className="text-token-error text-xs mt-1">{error}</p>}
     </div>
   )
