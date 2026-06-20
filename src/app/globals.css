@@ -105,6 +105,12 @@
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 12%, transparent);
   }
 
+  input.input-field[type="date"],
+  input.input-field[type="time"] {
+    min-width: 0;
+    width: 100%;
+  }
+
   .container-app {
     @apply max-w-7xl mx-auto px-8;
   }
