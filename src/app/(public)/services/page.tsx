@@ -79,7 +79,7 @@ export default function ServicesPage() {
         {/* Section Header */}
         <div className="text-center mb-4 lg:mb-12">
           <h1
-            className="text-3xl md:text-4xl font-display font-extrabold leading-none"
+            className="text-4xl md:text-5xl font-display font-extrabold leading-none"
             style={{ color: 'var(--md-on-background)' }}
           >
             Home services for every need
