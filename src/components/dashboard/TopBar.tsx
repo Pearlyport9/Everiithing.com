@@ -254,9 +254,9 @@ function AdminSearchDropdown({ query, setQuery, onClose, theme }: { query: strin
             <>
               <p className="px-4 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-widest" style={{ color: muted }}>Providers</p>
               {providers.map((p) => (
-                <Link key={p.id} href="/admin/providers" onClick={onClose}
-                  className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-token-surfaceContainerLow"
-                  style={{ color: accent }}>{p.full_name}</Link>
+                <button key={p.id} onClick={() => { onClose(); window.location.href = '/admin/providers' }}
+                  className="flex w-full text-left items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-token-surfaceContainerLow"
+                  style={{ color: accent }}>{p.full_name}</button>
               ))}
             </>
           )}
@@ -264,9 +264,9 @@ function AdminSearchDropdown({ query, setQuery, onClose, theme }: { query: strin
             <>
               <p className="px-4 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-widest" style={{ color: muted }}>Bookings</p>
               {bookings.map((b) => (
-                <Link key={b.id} href="/admin/bookings" onClick={onClose}
-                  className="block px-4 py-2.5 text-sm transition-colors hover:bg-token-surfaceContainerLow"
-                  style={{ color: accent }}>{b.service_name || b.id.slice(0, 8)}</Link>
+                <button key={b.id} onClick={() => { onClose(); window.location.href = '/admin/bookings' }}
+                  className="block w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-token-surfaceContainerLow"
+                  style={{ color: accent }}>{b.service_name || b.id.slice(0, 8)}</button>
               ))}
             </>
           )}
@@ -337,9 +337,9 @@ function CustomerSearchDropdown({ query, setQuery, onClose, theme }: { query: st
             <>
               <p className="px-4 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-widest" style={{ color: muted }}>My Bookings</p>
               {bookings.map((b) => (
-                <Link key={b.id} href={`/dashboard/bookings?id=${b.id}`} onClick={onClose}
-                  className="block px-4 py-2.5 text-sm transition-colors hover:bg-token-surfaceContainerLow"
-                  style={{ color: accent }}>{b.service_name || 'Booking'}</Link>
+                <button key={b.id} onClick={() => { onClose(); window.location.href = `/dashboard/bookings?id=${b.id}` }}
+                  className="block w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-token-surfaceContainerLow"
+                  style={{ color: accent }}>{b.service_name || 'Booking'}</button>
               ))}
             </>
           )}
@@ -347,9 +347,9 @@ function CustomerSearchDropdown({ query, setQuery, onClose, theme }: { query: st
             <>
               <p className="px-4 pt-2 pb-1 text-[11px] font-semibold uppercase tracking-widest" style={{ color: muted }}>Services</p>
               {services.map((s) => (
-                <Link key={s.id} href={`/dashboard/book?service=${s.id}`} onClick={onClose}
-                  className="block px-4 py-2.5 text-sm transition-colors hover:bg-token-surfaceContainerLow"
-                  style={{ color: accent }}>{s.name}</Link>
+                <button key={s.id} onClick={() => { onClose(); window.location.href = `/dashboard/book?service=${s.id}` }}
+                  className="block w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-token-surfaceContainerLow"
+                  style={{ color: accent }}>{s.name}</button>
               ))}
             </>
           )}
