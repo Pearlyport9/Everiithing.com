@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 import {
   Wrench, Zap, Wind, Battery, PaintBucket, Sparkles, Hammer,
   Check, ArrowLeft, Upload, HelpCircle,
@@ -63,6 +64,7 @@ export default function BookServiceView() {
   const photoInputRef = useRef<HTMLInputElement>(null)
 
   const { sdkLoaded, openCheckout } = useFlutterwaveCheckout()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     async function fetchCategories() {
@@ -93,6 +95,30 @@ export default function BookServiceView() {
       fetchSubServices(selectedCategory.id)
     }
   }, [step, selectedCategory?.id, isCustomRequest])
+
+  useEffect(() => {
+    const serviceId = searchParams.get('service')
+    if (!serviceId || categories.length === 0) return
+
+    async function preSelectService() {
+      const { data: svc } = await supabase
+        .from('services')
+        .select('id, category_id, name, description, base_price_ngn, duration_hours')
+        .eq('id', serviceId)
+        .single()
+
+      if (!svc) return
+
+      const category = categories.find((c: Category) => c.id === svc.category_id)
+      if (!category) return
+
+      setSelectedCategory(category)
+      setSelectedSubService(svc as Service)
+      setStep(2)
+    }
+
+    preSelectService()
+  }, [searchParams, categories])
 
   async function fetchSubServices(categoryId: string) {
     setLoadingSubServices(true)
