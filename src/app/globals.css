@@ -106,11 +106,14 @@
   }
 
   .input-field-wrapper {
+    display: flex;
+    align-items: center;
     border-radius: 0.5rem;
     border-width: 2px;
     border-style: solid;
     border-color: var(--color-outline);
-    padding: 14px 1rem;
+    padding: 0 1rem;
+    min-height: calc(14px + 14px + 2px + 2px + 1.2em);
     background-color: var(--color-surfaceContainerLowest);
     transition: border-color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   }
