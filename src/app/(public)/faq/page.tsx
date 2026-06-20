@@ -247,7 +247,7 @@ export default function FAQPage() {
               transition: 'opacity 450ms ease-out 100ms, transform 450ms ease-out 100ms',
             }}
           >
-            Everything you need to know before booking
+            Everything you need to know
           </p>
         </div>
       </section>
