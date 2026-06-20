@@ -96,6 +96,8 @@
     @apply w-full border-2 border-token-outline rounded-md px-4 py-[14px] text-[15px] text-token-onSurface
            transition-colors duration-fast
            focus:border-token-primary focus:outline-none focus:ring-0;
+    min-width: 0;
+    max-width: 100%;
     background-color: var(--color-surfaceContainerLowest);
   }
 
