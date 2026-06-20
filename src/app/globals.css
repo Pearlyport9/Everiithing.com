@@ -220,3 +220,8 @@
   }
 }
 
+
+input.input-field[type='date'], input.input-field[type='time'] {
+  width: 120px !important;
+  background: yellow !important;
+}
