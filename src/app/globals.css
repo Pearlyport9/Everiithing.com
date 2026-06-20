@@ -209,9 +209,11 @@
 
 input.input-field[type='date'], input.input-field[type='time'] {
   width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
   box-sizing: border-box !important;
+  background: lime !important;
+  outline: 3px solid blue !important;
 }
 
 input.input-field[type='date']::-webkit-calendar-picker-indicator,
