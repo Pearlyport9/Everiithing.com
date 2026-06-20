@@ -219,3 +219,5 @@
     right: -8px;
   }
 }
+
+* { outline: 1px solid red !important; }
