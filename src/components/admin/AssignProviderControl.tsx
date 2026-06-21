@@ -6,6 +6,7 @@ import { ChevronDown, Loader2, UserCheck } from 'lucide-react'
 interface Provider {
   id: string
   full_name: string
+  verification_status: string
 }
 
 interface AssignProviderControlProps {
