@@ -184,7 +184,7 @@ export default function AdminBookingsPage() {
               return (
                 <Link
                   key={b.id}
-                  href={`/admin/bookings?id=${b.id}`}
+                  href={`/admin/bookings/${b.id}`}
                   className="block rounded-xl p-4 border"
                   style={{ backgroundColor: 'var(--color-surfaceContainerLowest)', borderColor: 'var(--color-outlineVariant)' }}
                 >
@@ -244,29 +244,29 @@ export default function AdminBookingsPage() {
                   return (
                     <tr key={b.id} className="transition-colors hover:bg-token-surfaceContainerLow">
                       <td className="px-3 py-3 whitespace-nowrap">
-                        <Link href={`/admin/bookings?id=${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
+                        <Link href={`/admin/bookings/${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
                           {formatDate(b.scheduled_date)} at {b.scheduled_time}
                         </Link>
                       </td>
                       <td className="px-3 py-3 whitespace-nowrap font-medium">
-                        <Link href={`/admin/bookings?id=${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
+                        <Link href={`/admin/bookings/${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
                           {serviceName}
                         </Link>
                       </td>
                       <td className="px-3 py-3 whitespace-nowrap">
-                        <Link href={`/admin/bookings?id=${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
+                        <Link href={`/admin/bookings/${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
                           {customerName}
                         </Link>
                       </td>
                       <td className="px-3 py-3 whitespace-nowrap">
                         {b.provider_id ? (
-                          <Link href={`/admin/bookings?id=${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
+                          <Link href={`/admin/bookings/${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
                             {assignedProviders[b.id]?.name || 'Assigned'}
                           </Link>
                         ) : b.status === 'confirmed' && b.payment_status === 'in_escrow' ? (
                           <AssignProviderControl bookingId={b.id} onAssigned={handleAssigned} />
                         ) : (
-                          <Link href={`/admin/bookings?id=${b.id}`} className="block">
+                          <Link href={`/admin/bookings/${b.id}`} className="block">
                             <span
                               className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold"
                               style={{ backgroundColor: 'var(--color-tertiaryContainer)', color: 'var(--color-onTertiaryContainer)' }}
@@ -277,12 +277,12 @@ export default function AdminBookingsPage() {
                         )}
                       </td>
                       <td className="px-3 py-3 whitespace-nowrap font-mono">
-                        <Link href={`/admin/bookings?id=${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
+                        <Link href={`/admin/bookings/${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
                           {formatNaira(b.price_ngn)}
                         </Link>
                       </td>
                       <td className="px-3 py-3 whitespace-nowrap">
-                        <Link href={`/admin/bookings?id=${b.id}`} className="block">
+                        <Link href={`/admin/bookings/${b.id}`} className="block">
                           <StatusBadge status={b.status as any} />
                         </Link>
                       </td>

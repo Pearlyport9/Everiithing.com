@@ -181,7 +181,7 @@ export default async function AdminDashboard() {
                 return (
                   <a
                     key={b.id}
-                    href={`/admin/bookings?id=${b.id}`}
+                    href={`/admin/bookings/${b.id}`}
                     className="block rounded-xl p-4 border"
                     style={{ backgroundColor: 'var(--color-surfaceContainerLowest)', borderColor: 'var(--color-outlineVariant)' }}
                   >
@@ -244,22 +244,22 @@ export default async function AdminDashboard() {
                     return (
                       <tr key={b.id} className="transition-colors hover:bg-token-surfaceContainerLow">
                         <td className="px-3 py-3 whitespace-nowrap">
-                          <a href={`/admin/bookings?id=${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
+                          <a href={`/admin/bookings/${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
                             {formatDate(b.scheduled_date)}<span className="hidden sm:inline">{` at ${b.scheduled_time}`}</span>
                           </a>
                         </td>
                         <td className="px-3 py-3 whitespace-nowrap font-medium">
-                          <a href={`/admin/bookings?id=${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
+                          <a href={`/admin/bookings/${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
                             {serviceName || '\u2014'}
                           </a>
                         </td>
                         <td className="px-3 py-3 whitespace-nowrap hidden lg:table-cell">
-                          <a href={`/admin/bookings?id=${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
+                          <a href={`/admin/bookings/${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
                             {customerName || '\u2014'}
                           </a>
                         </td>
                         <td className="px-3 py-3 whitespace-nowrap">
-                          <a href={`/admin/bookings?id=${b.id}`} className="block">
+                          <a href={`/admin/bookings/${b.id}`} className="block">
                             {b.provider_id ? (
                               <span style={{ color: 'var(--color-onSurface)' }}>Assigned</span>
                             ) : (
@@ -273,12 +273,12 @@ export default async function AdminDashboard() {
                           </a>
                         </td>
                         <td className="px-3 py-3 whitespace-nowrap font-mono hidden lg:table-cell">
-                          <a href={`/admin/bookings?id=${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
+                          <a href={`/admin/bookings/${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
                             {formatNaira(b.price_ngn)}
                           </a>
                         </td>
                         <td className="px-3 py-3 whitespace-nowrap capitalize">
-                          <a href={`/admin/bookings?id=${b.id}`} className="block" style={{ color: 'var(--color-onSurfaceVariant)' }}>
+                          <a href={`/admin/bookings/${b.id}`} className="block" style={{ color: 'var(--color-onSurfaceVariant)' }}>
                             {b.status.replace(/_/g, ' ')}
                           </a>
                         </td>
