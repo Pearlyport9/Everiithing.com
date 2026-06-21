@@ -107,11 +107,45 @@ export async function POST(req: Request) {
 
     const admin = createAdminClient()
 
-    const { data: booking } = await admin
+    let booking: {
+      id: string
+      price_ngn: number
+      topup_owed_ngn: number | null
+      status: string
+      payment_status: string
+    } | null = null
+
+    let isTopupPayment = false
+
+    const { data: initialBooking } = await admin
       .from('bookings')
-      .select('id, price_ngn, status, payment_status')
+      .select('id, price_ngn, topup_owed_ngn, status, payment_status')
       .eq('flw_tx_ref', tx_ref)
-      .single()
+      .maybeSingle()
+
+    if (initialBooking) {
+      booking = initialBooking
+    } else {
+      const { data: topupLog } = await admin
+        .from('payment_logs')
+        .select('booking_id')
+        .eq('flw_tx_ref', tx_ref)
+        .eq('event_type', 'topup_initiated')
+        .maybeSingle()
+
+      if (topupLog?.booking_id) {
+        const { data: topupBooking } = await admin
+          .from('bookings')
+          .select('id, price_ngn, topup_owed_ngn, status, payment_status')
+          .eq('id', topupLog.booking_id)
+          .single()
+
+        if (topupBooking) {
+          booking = topupBooking
+          isTopupPayment = true
+        }
+      }
+    }
 
     if (!booking) {
       logPayment({
@@ -124,7 +158,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ status: 'not_found' })
     }
 
-    if (booking.status === 'confirmed') {
+    if (!isTopupPayment && booking.status === 'confirmed') {
       logPayment({
         booking_id: booking.id,
         flw_tx_ref: tx_ref,
@@ -138,34 +172,49 @@ export async function POST(req: Request) {
       return NextResponse.json({ status: 'already_processed' })
     }
 
-    const paidAmount = verificationData?.amount ?? null
-
-    if (paidAmount !== null && paidAmount < booking.price_ngn) {
+    if (isTopupPayment && booking.status !== 'pending_quote') {
       logPayment({
         booking_id: booking.id,
         flw_tx_ref: tx_ref,
         flw_transaction_id: String(transactionId),
-        event_type: 'amount_mismatch',
+        event_type: 'topup_already_processed',
+        status: 'success',
+        expected_amount: booking.topup_owed_ngn ?? 0,
+        paid_amount: verificationData?.amount ?? null,
+        currency: verificationData?.currency ?? 'NGN',
+      })
+      return NextResponse.json({ status: 'already_processed' })
+    }
+
+    const paidAmount = verificationData?.amount ?? null
+    const expectedAmount = isTopupPayment ? (booking.topup_owed_ngn ?? 0) : booking.price_ngn
+
+    if (paidAmount !== null && paidAmount < expectedAmount) {
+      logPayment({
+        booking_id: booking.id,
+        flw_tx_ref: tx_ref,
+        flw_transaction_id: String(transactionId),
+        event_type: isTopupPayment ? 'topup_amount_mismatch' : 'amount_mismatch',
         status: 'failed',
-        expected_amount: booking.price_ngn,
+        expected_amount: expectedAmount,
         paid_amount: paidAmount,
         currency: verificationData?.currency ?? 'NGN',
-        error_message: `Underpayment: paid ${paidAmount}, expected ${booking.price_ngn}`,
+        error_message: `Underpayment: paid ${paidAmount}, expected ${expectedAmount}`,
       })
       return NextResponse.json({ status: 'amount_mismatch' })
     }
 
-    if (paidAmount !== null && paidAmount > booking.price_ngn) {
+    if (paidAmount !== null && paidAmount > expectedAmount) {
       logPayment({
         booking_id: booking.id,
         flw_tx_ref: tx_ref,
         flw_transaction_id: String(transactionId),
-        event_type: 'overpayment_detected',
+        event_type: isTopupPayment ? 'topup_overpayment_detected' : 'overpayment_detected',
         status: 'success',
-        expected_amount: booking.price_ngn,
+        expected_amount: expectedAmount,
         paid_amount: paidAmount,
         currency: verificationData?.currency ?? 'NGN',
-        error_message: `Overpayment: paid ${paidAmount}, expected ${booking.price_ngn}`,
+        error_message: `Overpayment: paid ${paidAmount}, expected ${expectedAmount}`,
       })
     }
 
@@ -187,9 +236,9 @@ export async function POST(req: Request) {
       booking_id: booking.id,
       flw_tx_ref: tx_ref,
       flw_transaction_id: String(transactionId),
-      event_type: 'booking_confirmed',
+      event_type: isTopupPayment ? 'topup_confirmed' : 'booking_confirmed',
       status: 'success',
-      expected_amount: booking.price_ngn,
+      expected_amount: expectedAmount,
       paid_amount: paidAmount,
       currency: verificationData?.currency ?? 'NGN',
     })

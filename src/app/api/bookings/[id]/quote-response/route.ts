@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { logPayment } from '@/lib/paymentLogger'
 
 export async function POST(
   req: Request,
@@ -31,7 +32,7 @@ export async function POST(
 
     const { data: booking } = await admin
       .from('bookings')
-      .select('id, customer_id, status, quoted_total_ngn')
+      .select('id, customer_id, status, quoted_total_ngn, topup_owed_ngn, price_ngn')
       .eq('id', id)
       .single()
 
@@ -63,27 +64,74 @@ export async function POST(
       )
     }
 
-    const newStatus = action === 'accept' ? 'confirmed' : 'cancelled'
+    if (action === 'reject') {
+      const { error: updateError } = await admin
+        .from('bookings')
+        .update({
+          status: 'cancelled',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', id)
+
+      if (updateError) {
+        console.error('Failed to reject quote:', updateError)
+        return NextResponse.json(
+          { success: false, error: { code: 'DB_ERROR', message: 'Failed to reject quote' } },
+          { status: 500 },
+        )
+      }
+
+      return NextResponse.json({
+        success: true,
+        data: { status: 'cancelled' },
+      })
+    }
+
+    const topupOwed = booking.topup_owed_ngn ?? 0
+
+    if (topupOwed > 0) {
+      const topupTxRef = `EVR-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`
+
+      logPayment({
+        booking_id: id,
+        flw_tx_ref: topupTxRef,
+        event_type: 'topup_initiated',
+        status: 'initiated',
+        expected_amount: topupOwed,
+      })
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          requires_payment: true,
+          tx_ref: topupTxRef,
+          amount: topupOwed,
+        },
+      })
+    }
+
+    const newPaymentStatus = booking.price_ngn > 0 ? 'in_escrow' : 'paid'
 
     const { error: updateError } = await admin
       .from('bookings')
       .update({
-        status: newStatus,
+        status: 'confirmed',
+        payment_status: newPaymentStatus,
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)
 
     if (updateError) {
-      console.error('Failed to update booking status:', updateError)
+      console.error('Failed to accept quote:', updateError)
       return NextResponse.json(
-        { success: false, error: { code: 'DB_ERROR', message: 'Failed to update booking status' } },
+        { success: false, error: { code: 'DB_ERROR', message: 'Failed to accept quote' } },
         { status: 500 },
       )
     }
 
     return NextResponse.json({
       success: true,
-      data: { status: newStatus },
+      data: { requires_payment: false, status: 'confirmed' },
     })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'SERVER_ERROR'

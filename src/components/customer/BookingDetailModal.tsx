@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Modal } from '@/components/ui/Modal'
-import { Loader2, CheckCircle, XCircle } from 'lucide-react'
+import { Loader2, CheckCircle, XCircle, ExternalLink } from 'lucide-react'
 import type { Booking } from '@/types'
+import { useFlutterwaveCheckout } from '@/lib/flutterwave/useFlutterwaveCheckout'
 
 type BookingDetail = Pick<Booking,
   | 'id' | 'scheduled_date' | 'scheduled_time' | 'price_ngn'
@@ -40,11 +41,15 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
   const [error, setError] = useState('')
   const [actionLoading, setActionLoading] = useState(false)
   const [actionError, setActionError] = useState('')
+  const [paymentPending, setPaymentPending] = useState(false)
+  const { sdkLoaded, openCheckout } = useFlutterwaveCheckout()
+  const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
     if (!bookingId) return
     setLoading(true)
     setError('')
+    setPaymentPending(false)
 
     async function load() {
       try {
@@ -94,6 +99,15 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
     load()
   }, [bookingId])
 
+  useEffect(() => {
+    return () => {
+      if (pollingRef.current) {
+        clearInterval(pollingRef.current)
+        pollingRef.current = null
+      }
+    }
+  }, [])
+
   const serviceName = booking?.service
     ? (Array.isArray(booking.service) ? booking.service[0]?.name : booking.service.name)
     : null
@@ -101,6 +115,57 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
   const providerName = booking?.provider
     ? (Array.isArray(booking.provider) ? booking.provider[0]?.full_name : booking.provider.full_name)
     : null
+
+  const refetchBooking = useCallback(async () => {
+    if (!bookingId) return
+    try {
+      const { createClient } = await import('@/lib/supabase/client')
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      const { data } = await supabase
+        .from('bookings')
+        .select(`
+          id, scheduled_date, scheduled_time, price_ngn, status,
+          payment_status, notes, address, lga, created_at, provider_id,
+          quoted_total_ngn, topup_owed_ngn, quote_notes,
+          provider:provider_id (full_name),
+          service:service_id (name)
+        `)
+        .eq('id', bookingId)
+        .eq('customer_id', user.id)
+        .single()
+      if (data) {
+        setBooking(data as unknown as BookingDetail)
+        if (data.status === 'confirmed') {
+          setActionLoading(false)
+          setPaymentPending(false)
+          if (pollingRef.current) {
+            clearInterval(pollingRef.current)
+            pollingRef.current = null
+          }
+        }
+      }
+    } catch {
+      // silent
+    }
+  }, [bookingId])
+
+  const startPolling = useCallback(() => {
+    setPaymentPending(true)
+    let attempts = 0
+    const interval = setInterval(async () => {
+      attempts++
+      await refetchBooking()
+      if (attempts >= 6) {
+        clearInterval(interval)
+        pollingRef.current = null
+        setActionLoading(false)
+        setPaymentPending(false)
+      }
+    }, 2500)
+    pollingRef.current = interval
+  }, [refetchBooking])
 
   const handleQuoteResponse = async (action: 'accept' | 'reject') => {
     if (!booking) return
@@ -113,15 +178,67 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
         body: JSON.stringify({ action }),
       })
       const json = await res.json()
-      if (json.success) {
-        setBooking((prev) => prev ? { ...prev, status: json.data.status } : prev)
-      } else {
+      if (!json.success) {
         setActionError(json.error?.message || `Failed to ${action} quote.`)
+        setActionLoading(false)
+        return
       }
+
+      if (action === 'reject') {
+        setBooking((prev) => prev ? { ...prev, status: 'cancelled' } : prev)
+        setActionLoading(false)
+        return
+      }
+
+      if (!json.data.requires_payment) {
+        setBooking((prev) => prev ? { ...prev, status: 'confirmed' } : prev)
+        setActionLoading(false)
+        return
+      }
+
+      const { createClient } = await import('@/lib/supabase/client')
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        setActionError('Not authenticated.')
+        setActionLoading(false)
+        return
+      }
+
+      if (!sdkLoaded) {
+        setActionError('Payment system not ready. Please refresh and try again.')
+        setActionLoading(false)
+        return
+      }
+
+      let redirected = false
+      const onFlwClose = () => {
+        if (redirected) return
+        redirected = true
+        setTimeout(() => startPolling(), 1000)
+      }
+
+      openCheckout({
+        tx_ref: json.data.tx_ref,
+        amount: json.data.amount,
+        customer: {
+          email: user.email!,
+          name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Customer',
+        },
+        customizations: {
+          title: 'Everiithing\u2022com',
+          description: serviceName ? `${serviceName} \u2014 Top-Up` : 'Quote Top-Up Payment',
+        },
+        meta: {
+          booking_id: booking.id,
+        },
+        callback: () => onFlwClose(),
+        onclose: () => onFlwClose(),
+      })
     } catch {
       setActionError('Network error. Please try again.')
+      setActionLoading(false)
     }
-    setActionLoading(false)
   }
 
   const statusLabel = (s: string) => {
@@ -207,7 +324,7 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
                 )}
                 {booking.quote_notes && <Row label="Quote notes" value={booking.quote_notes} />}
 
-                {booking.status === 'pending_quote' && booking.quoted_total_ngn != null && (
+                {booking.status === 'pending_quote' && booking.quoted_total_ngn != null && !paymentPending && (
                   <div className="pt-3 space-y-3">
                     {actionError && (
                       <p className="text-xs font-medium" style={{ color: 'var(--color-error)' }}>{actionError}</p>
@@ -240,6 +357,15 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
                         Reject Quote
                       </button>
                     </div>
+                  </div>
+                )}
+
+                {paymentPending && (
+                  <div className="pt-3 flex items-center gap-2">
+                    <Loader2 size={14} className="animate-spin" style={{ color: 'var(--color-primary)' }} />
+                    <p className="text-xs font-medium" style={{ color: 'var(--color-onSurfaceVariant)' }}>
+                      Processing payment&hellip;
+                    </p>
                   </div>
                 )}
               </div>
