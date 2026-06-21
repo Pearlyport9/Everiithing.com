@@ -18,7 +18,7 @@ export async function PATCH(
 
     const { data: booking } = await admin
       .from('bookings')
-      .select('id, status')
+      .select('id, status, quoted_total_ngn, topup_owed_ngn')
       .eq('id', id)
       .single()
 
@@ -34,6 +34,22 @@ export async function PATCH(
         { success: false, error: { code: 'INVALID_STATUS', message: 'Only assigned or in-progress bookings can be marked complete' } },
         { status: 400 },
       )
+    }
+
+    if (!booking.quoted_total_ngn) {
+      return NextResponse.json(
+        { success: false, error: { code: 'QUOTE_REQUIRED', message: 'A quote must be sent before marking this booking as complete.' } },
+        { status: 400 },
+      )
+    }
+
+    if ((booking.topup_owed_ngn ?? 0) > 0) {
+      if (booking.status === 'pending_quote') {
+        return NextResponse.json(
+          { success: false, error: { code: 'TOPUP_UNPAID', message: 'The top-up payment must be settled before marking this booking as complete.' } },
+          { status: 400 },
+        )
+      }
     }
 
     const { error: updateError } = await admin

@@ -218,10 +218,12 @@ export async function POST(req: Request) {
       })
     }
 
+    const newStatus = isTopupPayment ? 'confirmed' : 'pending_quote'
+
     const { error: updateError } = await admin
       .from('bookings')
       .update({
-        status: 'confirmed',
+        status: newStatus,
         payment_status: 'in_escrow',
         updated_at: new Date().toISOString(),
       })
