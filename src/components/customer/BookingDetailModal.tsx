@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Modal } from '@/components/ui/Modal'
-import { Loader2 } from 'lucide-react'
+import { Loader2, CheckCircle, XCircle } from 'lucide-react'
 import type { Booking } from '@/types'
 
 type BookingDetail = Pick<Booking,
@@ -38,6 +38,8 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
   const [booking, setBooking] = useState<BookingDetail | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [actionLoading, setActionLoading] = useState(false)
+  const [actionError, setActionError] = useState('')
 
   useEffect(() => {
     if (!bookingId) return
@@ -99,6 +101,28 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
   const providerName = booking?.provider
     ? (Array.isArray(booking.provider) ? booking.provider[0]?.full_name : booking.provider.full_name)
     : null
+
+  const handleQuoteResponse = async (action: 'accept' | 'reject') => {
+    if (!booking) return
+    setActionLoading(true)
+    setActionError('')
+    try {
+      const res = await fetch(`/api/bookings/${booking.id}/quote-response`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action }),
+      })
+      const json = await res.json()
+      if (json.success) {
+        setBooking((prev) => prev ? { ...prev, status: json.data.status } : prev)
+      } else {
+        setActionError(json.error?.message || `Failed to ${action} quote.`)
+      }
+    } catch {
+      setActionError('Network error. Please try again.')
+    }
+    setActionLoading(false)
+  }
 
   const statusLabel = (s: string) => {
     const labels: Record<string, string> = {
@@ -182,6 +206,42 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
                   <Row label="Top-up owed" value={formatNaira(booking.topup_owed_ngn)} mono />
                 )}
                 {booking.quote_notes && <Row label="Quote notes" value={booking.quote_notes} />}
+
+                {booking.status === 'pending_quote' && booking.quoted_total_ngn != null && (
+                  <div className="pt-3 space-y-3">
+                    {actionError && (
+                      <p className="text-xs font-medium" style={{ color: 'var(--color-error)' }}>{actionError}</p>
+                    )}
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                      <button
+                        onClick={() => handleQuoteResponse('accept')}
+                        disabled={actionLoading}
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-onPrimary)' }}
+                      >
+                        {actionLoading ? (
+                          <Loader2 size={16} className="animate-spin" />
+                        ) : (
+                          <CheckCircle size={16} />
+                        )}
+                        Accept Quote
+                      </button>
+                      <button
+                        onClick={() => handleQuoteResponse('reject')}
+                        disabled={actionLoading}
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                        style={{ backgroundColor: 'var(--color-error)', color: 'var(--color-onError)' }}
+                      >
+                        {actionLoading ? (
+                          <Loader2 size={16} className="animate-spin" />
+                        ) : (
+                          <XCircle size={16} />
+                        )}
+                        Reject Quote
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
