@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { Search, CalendarCheck, ArrowRight, X } from 'lucide-react'
 import { StatusBadge } from '@/components/ui/StatusBadge'
+import { AssignProviderControl } from '@/components/admin/AssignProviderControl'
 
 interface Booking {
   id: string
@@ -46,6 +47,12 @@ export default function AdminBookingsPage() {
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(false)
   const [total, setTotal] = useState(0)
+  const [assignedProviders, setAssignedProviders] = useState<Record<string, { id: string; name: string }>>({})
+
+  const handleAssigned = (bookingId: string, providerId: string, providerName: string) => {
+    setAssignedProviders((prev) => ({ ...prev, [bookingId]: { id: providerId, name: providerName } }))
+    setBookings((prev) => prev.map((b) => (b.id === bookingId ? { ...b, provider_id: providerId } : b)))
+  }
 
   const fetchBookings = useCallback(async (s: FilterStatus, p: number, append: boolean) => {
     setLoading(true)
@@ -205,6 +212,11 @@ export default function AdminBookingsPage() {
                       <div className="mt-1">
                         <StatusBadge status={b.status as any} />
                       </div>
+                      {!b.provider_id && b.status === 'confirmed' && b.payment_status === 'in_escrow' && (
+                        <div className="mt-2" onClick={(e) => e.stopPropagation()}>
+                          <AssignProviderControl bookingId={b.id} onAssigned={handleAssigned} />
+                        </div>
+                      )}
                     </div>
                   </div>
                 </Link>
@@ -247,18 +259,22 @@ export default function AdminBookingsPage() {
                         </Link>
                       </td>
                       <td className="px-3 py-3 whitespace-nowrap">
-                        <Link href={`/admin/bookings?id=${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
-                          {b.provider_id ? (
-                            <span style={{ color: 'var(--color-onSurface)' }}>Assigned</span>
-                          ) : (
+                        {b.provider_id ? (
+                          <Link href={`/admin/bookings?id=${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
+                            {assignedProviders[b.id]?.name || 'Assigned'}
+                          </Link>
+                        ) : b.status === 'confirmed' && b.payment_status === 'in_escrow' ? (
+                          <AssignProviderControl bookingId={b.id} onAssigned={handleAssigned} />
+                        ) : (
+                          <Link href={`/admin/bookings?id=${b.id}`} className="block">
                             <span
                               className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold"
                               style={{ backgroundColor: 'var(--color-tertiaryContainer)', color: 'var(--color-onTertiaryContainer)' }}
                             >
                               Unassigned
                             </span>
-                          )}
-                        </Link>
+                          </Link>
+                        )}
                       </td>
                       <td className="px-3 py-3 whitespace-nowrap font-mono">
                         <Link href={`/admin/bookings?id=${b.id}`} className="block" style={{ color: 'var(--color-onSurface)' }}>
