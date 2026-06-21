@@ -3,24 +3,16 @@
 import { useState, useEffect } from 'react'
 import { Modal } from '@/components/ui/Modal'
 import { Loader2 } from 'lucide-react'
+import type { Booking } from '@/types'
 
-interface BookingDetail {
-  id: string
-  scheduled_date: string
-  scheduled_time: string
-  price_ngn: number
-  status: string
-  payment_status: string
-  notes?: string
-  address?: string
-  lga?: string
-  created_at: string
+type BookingDetail = Pick<Booking,
+  | 'id' | 'scheduled_date' | 'scheduled_time' | 'price_ngn'
+  | 'status' | 'payment_status' | 'notes' | 'address' | 'lga'
+  | 'created_at' | 'provider_id'
+  | 'quoted_total_ngn' | 'topup_owed_ngn' | 'quote_notes'
+> & {
   provider?: { full_name?: string } | null
   service?: { name?: string } | null
-  provider_id?: string | null
-  quoted_total_ngn?: number | null
-  topup_owed_ngn?: number | null
-  quote_notes?: string | null
 }
 
 interface BookingDetailModalProps {

@@ -89,6 +89,9 @@ export interface Booking {
   address: string
   lga: string
   notes?: string
+  quoted_total_ngn?: number | null
+  quote_notes?: string | null
+  topup_owed_ngn?: number | null
   price_ngn: number
   platform_fee_ngn?: number
   provider_payout_ngn?: number
