@@ -57,6 +57,9 @@ export default function AdminBookingDetailPage() {
   const [sendSuccess, setSendSuccess] = useState('')
   const [saveError, setSaveError] = useState('')
   const [sendError, setSendError] = useState('')
+  const [completing, setCompleting] = useState(false)
+  const [completeError, setCompleteError] = useState('')
+  const [completeSuccess, setCompleteSuccess] = useState('')
 
   useEffect(() => {
     if (!id) return
@@ -134,6 +137,8 @@ export default function AdminBookingDetailPage() {
 
   const isPendingQuote = booking?.status === 'pending_quote'
   const hasQuoteData = booking?.quoted_total_ngn != null
+  const canComplete = booking?.status === 'provider_assigned' || booking?.status === 'in_progress'
+  const isCompleted = booking?.status === 'completed'
 
   const clearMessages = () => {
     setSaveSuccess('')
@@ -208,6 +213,27 @@ export default function AdminBookingDetailPage() {
       setSendError('Network error. Please try again.')
     }
     setSending(false)
+  }
+
+  const handleMarkComplete = async () => {
+    setCompleteError('')
+    setCompleteSuccess('')
+    setCompleting(true)
+    try {
+      const res = await fetch(`/api/admin/bookings/${id}/complete`, {
+        method: 'PATCH',
+      })
+      const json = await res.json()
+      if (json.success) {
+        setCompleteSuccess('Booking marked as completed.')
+        setBooking((prev) => prev ? { ...prev, status: 'completed' } : prev)
+      } else {
+        setCompleteError(json.error?.message || 'Failed to mark as complete.')
+      }
+    } catch {
+      setCompleteError('Network error. Please try again.')
+    }
+    setCompleting(false)
   }
 
   if (loading) {
@@ -501,7 +527,76 @@ export default function AdminBookingDetailPage() {
         </div>
       )}
 
-      {!isPendingQuote && !hasQuoteData && (
+      {canComplete && (
+        <div
+          className="rounded-xl p-5 md:p-6 border"
+          style={{ borderColor: 'var(--color-outlineVariant)' }}
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center"
+              style={{ backgroundColor: 'var(--color-success)' }}
+            >
+              <CheckCircle size={18} style={{ color: 'var(--color-onSuccess)' }} />
+            </div>
+            <div>
+              <p className="font-display font-semibold text-base" style={{ color: 'var(--color-onSurface)' }}>
+                Job Completion
+              </p>
+              <p className="text-xs" style={{ color: 'var(--color-onSurfaceVariant)' }}>
+                Mark this job as finished
+              </p>
+            </div>
+          </div>
+
+          {completeSuccess && (
+            <div className="flex items-center gap-2 px-4 py-3 rounded-lg mb-4 text-sm font-medium" style={{ backgroundColor: 'color-mix(in srgb, var(--color-success) 15%, transparent)', color: 'var(--color-success)' }}>
+              <CheckCircle size={16} />
+              {completeSuccess}
+            </div>
+          )}
+          {completeError && (
+            <div className="flex items-center gap-2 px-4 py-3 rounded-lg mb-4 text-sm font-medium" style={{ backgroundColor: 'color-mix(in srgb, var(--color-error) 15%, transparent)', color: 'var(--color-error)' }}>
+              <AlertCircle size={16} />
+              {completeError}
+            </div>
+          )}
+
+          <button
+            onClick={handleMarkComplete}
+            disabled={completing}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: 'var(--color-success)', color: 'var(--color-onSuccess)' }}
+          >
+            {completing ? (
+              <><Loader2 size={16} className="animate-spin" /> Marking as Complete...</>
+            ) : (
+              <><CheckCircle size={16} /> Mark as Complete</>
+            )}
+          </button>
+        </div>
+      )}
+
+      {isCompleted && (
+        <div
+          className="rounded-xl p-5 md:p-6 border"
+          style={{ backgroundColor: 'color-mix(in srgb, var(--color-success) 10%, transparent)', borderColor: 'var(--color-success)' }}
+        >
+          <div className="flex items-center gap-3">
+            <CheckCircle size={20} style={{ color: 'var(--color-success)' }} />
+            <div>
+              <p className="font-display font-semibold text-base" style={{ color: 'var(--color-onSurface)' }}>
+                Job Completed
+              </p>
+              <p className="text-xs" style={{ color: 'var(--color-onSurfaceVariant)' }}>
+                This booking has been marked as finished. Payout can be processed manually.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {!isPendingQuote && !hasQuoteData && !canComplete && !isCompleted && (
         <div className="flex flex-col items-center justify-center py-12">
           <p className="text-sm" style={{ color: 'var(--color-onSurfaceVariant)' }}>
             This booking does not require a quote.
