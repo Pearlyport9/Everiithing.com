@@ -145,7 +145,7 @@ export async function POST(
           <p style="font-size: 14px; color: #666; margin-bottom: 24px;">${sanitize(serviceName)}</p>
 
           <p style="font-size: 14px; color: #333; line-height: 1.6; margin-bottom: 20px;">
-            Your assigned provider has assessed the job and provided the following quote.
+            A provider has assessed the job and provided the following quote.
           </p>
 
           ${booking.quote_notes ? `
@@ -171,7 +171,7 @@ export async function POST(
           </table>
 
           <p style="font-size: 14px; color: #333; line-height: 1.6; margin-bottom: 8px;">
-            To proceed, please reply to this email or contact us to approve the quote and arrange the top-up payment.
+            To proceed, open your booking in your <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/dashboard/bookings" style="color: #1a6d4c; text-decoration: underline;">Everiithing dashboard</a> to approve the quote and pay the balance securely.
           </p>
           <p style="font-size: 14px; color: #333; line-height: 1.6; margin-bottom: 24px;">
             Thank you for choosing Everiithing.
