@@ -165,7 +165,7 @@ export default function ServicesCarousel() {
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <div className="text-center" style={{ marginBottom: '48px' }}>
           <h2 className="text-3xl md:text-4xl font-display font-bold leading-tight" style={{ color: 'var(--md-on-surface)' }}>
-            Every Home & Office Problem, One Platform
+            Home & Office, One Platform
           </h2>
           <p
             className="mx-auto mt-2"
