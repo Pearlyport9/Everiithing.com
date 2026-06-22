@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { calculateCommission } from '@/utils/payments'
+import { CALL_OUT_FEE } from '@/lib/constants'
 
 export async function GET() {
   return NextResponse.json({ success: true, data: [] })
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
 
     const txRef = `EVR-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`
 
-    const { platformFee, providerPayout } = calculateCommission(service.base_price_ngn)
+    const { platformFee, providerPayout } = calculateCommission(CALL_OUT_FEE)
 
     const { data: booking, error: insertError } = await admin
       .from('bookings')
@@ -57,7 +58,7 @@ export async function POST(req: Request) {
         address,
         lga,
         notes: notes || null,
-        price_ngn: service.base_price_ngn,
+        price_ngn: CALL_OUT_FEE,
         platform_fee_ngn: platformFee,
         provider_payout_ngn: providerPayout,
         flw_tx_ref: txRef,

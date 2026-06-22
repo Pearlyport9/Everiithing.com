@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/Input'
 import { createClient } from '@/lib/supabase/client'
 import { useFlutterwaveCheckout } from '@/lib/flutterwave/useFlutterwaveCheckout'
 import type { Service } from '@/types'
+import { CALL_OUT_FEE } from '@/lib/constants'
 
 const steps = ['Category', 'Service', 'Schedule', 'Confirm']
 
@@ -449,7 +450,7 @@ export default function BookServiceView() {
                 Select the specific service
               </p>
               <p className="text-sm text-[--md-on-surface-variant] mt-1 mb-4 md:mb-6 leading-relaxed max-w-prose">
-                Prices shown are call-out fees &mdash; they cover a vetted provider&apos;s visit and assessment, and count toward your final bill. Any materials or extra work are quoted after inspection, and you approve before anything proceeds. The call-out fee covers the provider&apos;s visit and is non-refundable, even if you choose not to proceed after the quote.
+                A flat call-out fee of {formatPrice(CALL_OUT_FEE)} covers a vetted provider&apos;s visit and assessment, and counts toward your final bill. Any materials or extra work are quoted after inspection, and you approve before anything proceeds. The call-out fee is non-refundable, even if you choose not to proceed after the quote.
               </p>
 
               {loadingSubServices ? (
@@ -511,7 +512,7 @@ export default function BookServiceView() {
                         )}
 
                         <p className="font-semibold text-sm text-[--md-primary] mt-3">
-                          From {formatPrice(svc.base_price_ngn)}
+                          Call-out fee: {formatPrice(CALL_OUT_FEE)}
                         </p>
                         <p className="text-xs text-[--md-on-surface-variant] mt-0.5">
                           Visit &amp; assessment &mdash; final price confirmed after inspection
@@ -778,8 +779,8 @@ export default function BookServiceView() {
                 <p><span className="font-medium">Category:</span> {selectedCategory?.name || 'N/A'}</p>
                 <p><span className="font-medium">Service:</span> {selectedSubService?.name || 'N/A'}</p>
                 <p>
-                  <span className="font-medium">Price:</span>{' '}
-                  {selectedSubService ? formatPrice(selectedSubService.base_price_ngn) : 'N/A'}
+                  <span className="font-medium">Call-out fee:</span>{' '}
+                  {formatPrice(CALL_OUT_FEE)}
                 </p>
                 <p><span className="font-medium">Date:</span> {date || 'N/A'}</p>
                 <p><span className="font-medium">Time:</span> {time || 'N/A'}</p>
@@ -793,7 +794,7 @@ export default function BookServiceView() {
               <div className="flex items-center justify-between">
                 <span className="font-display font-semibold text-base text-token-onSurface">Total</span>
                 <span className="font-display font-bold text-xl text-token-primary">
-                  {selectedSubService ? formatPrice(selectedSubService.base_price_ngn) : 'N/A'}
+                  {formatPrice(CALL_OUT_FEE)}
                 </span>
               </div>
             </div>
