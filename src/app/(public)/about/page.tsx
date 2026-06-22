@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
 const collageImages = [
-  { src: '/Test%201%20pic.svg', alt: 'Home service professional' },
+  { src: '/Test%201%20pic.svg', alt: 'Home & office service professional' },
   { src: '/Test%202%20pic.svg', alt: 'Provider at work' },
   { src: '/Test%203%20pic.svg', alt: 'Service in progress' },
   { src: '/Test%204%20pic.svg', alt: 'Provider on site' },
@@ -131,7 +131,7 @@ export default function AboutPage() {
             }}
           >
             <span className="lg:hidden">Lagos&apos;s trusted marketplace.</span>
-            <span className="hidden lg:inline">The story behind Lagos&apos;s most trusted home services marketplace</span>
+            <span className="hidden lg:inline">The story behind Lagos&apos;s most trusted home & office services marketplace</span>
           </p>
         </div>
       </section>
@@ -205,13 +205,13 @@ export default function AboutPage() {
                 className="text-3xl md:text-4xl font-display font-bold max-md:leading-[1.0] leading-[1.15]"
                   style={{ color: 'var(--md-on-background)' }}
                 >
-                  Building Lagos&apos;s most<br />trusted home services marketplace
+                  Building Lagos&apos;s most<br />trusted home and office services marketplace
                 </h2>
                 <p
                   className="text-base md:text-lg leading-relaxed mt-2"
                   style={{ color: 'var(--md-on-surface-variant)', maxWidth: '520px' }}
                 >
-                  Every provider is verified, every payment is protected, and every job comes with a guarantee. We&rsquo;re here to take the risk out of finding help at home, so you can focus on what matters.
+                  Every provider is verified, every payment is protected, and every job comes with a guarantee. We&rsquo;re here to take the risk out of finding help at home or office, so you can focus on what matters.
                 </p>
               </div>
 
@@ -294,14 +294,14 @@ export default function AboutPage() {
                 className="text-3xl md:text-4xl font-display font-bold leading-[1.15]"
                 style={{ color: 'var(--md-on-surface)' }}
               >
-                Redefining home services<br />in Lagos
+                Redefining home & office services<br />in Lagos
               </h2>
 
               <p
                 className="text-sm md:text-base leading-relaxed"
                 style={{ color: 'var(--md-on-surface-variant)', maxWidth: '500px' }}
               >
-                Finding a trustworthy artisan in Lagos shouldn&apos;t feel like a gamble. We built Everiithing because homeowners deserve better: verified professionals, transparent pricing, and the peace of mind that comes with knowing your payment is protected until the job is done right.
+                Finding a trustworthy artisan in Lagos shouldn&apos;t feel like a gamble. We built Everiithing because homeowners & business owners deserve better: verified professionals, transparent pricing, and the peace of mind that comes with knowing your payment is protected until the job is done right.
                 </p>
 
               <div className="space-y-5 pt-2">
@@ -470,7 +470,7 @@ export default function AboutPage() {
         <div className="absolute inset-0" style={{ backgroundColor: 'var(--md-on-background)', opacity: 0.78 }} />
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 text-center">
           <h2 className="text-2xl md:text-3xl lg:text-5xl font-display font-bold text-white leading-tight">
-            Stop Gambling with Your Home
+            Stop Gambling with Your Home or Office
           </h2>
           <p className="text-white/80 text-sm md:text-base mt-2 mx-auto" style={{ maxWidth: '480px' }}>
             <span className="md:hidden">Verified pros, zero stress.</span>

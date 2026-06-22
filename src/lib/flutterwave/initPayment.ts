@@ -21,7 +21,7 @@ export async function initiatePayment(payload: PaymentPayload) {
     },
     customizations: {
       title: 'Everiithing\u2022com',
-      description: 'Home Service Booking',
+      description: 'Home & Office Service Booking',
       logo: process.env.NEXT_PUBLIC_LOGO_URL,
     },
   }

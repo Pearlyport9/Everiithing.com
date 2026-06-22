@@ -85,7 +85,7 @@ const categories = [
     questions: [
       {
         q: 'What is Everiithing?',
-        a: 'Everiithing is a verified home services marketplace for Lagos. We connect homeowners with trusted, vetted professionals for repairs, installations, cleaning, and more \u2014 with escrow payment protection on every job.',
+        a: 'Everiithing is a verified home & office services marketplace for Lagos. We connect homeowners & business owners with trusted, vetted professionals for repairs, installations, cleaning, and more \u2014 with escrow payment protection on every job.',
       },
       {
         q: 'How do I contact support?',
@@ -451,7 +451,7 @@ export default function FAQPage() {
         <div className="absolute inset-0" style={{ backgroundColor: 'var(--md-on-background)', opacity: 0.78 }} />
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 text-center">
           <h2 className="text-2xl md:text-3xl lg:text-5xl font-display font-bold text-white leading-tight">
-            Stop Gambling with Your Home
+            Stop Gambling with Your Home or Office
           </h2>
           <p className="text-white/80 text-sm md:text-base mt-2 mx-auto" style={{ maxWidth: '480px' }}>
             <span className="md:hidden">Verified pros, zero stress.</span>

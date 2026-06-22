@@ -165,13 +165,13 @@ export default function ServicesCarousel() {
       <div className="max-w-7xl mx-auto px-6 md:px-8">
         <div className="text-center" style={{ marginBottom: '48px' }}>
           <h2 className="text-3xl md:text-4xl font-display font-bold leading-tight" style={{ color: 'var(--md-on-surface)' }}>
-            Every Home Problem, One Platform
+            Every Home & Office Problem, One Platform
           </h2>
           <p
             className="mx-auto mt-2"
             style={{ color: 'var(--md-on-surface-variant)' }}
           >
-            Verified pros for every home problem.
+            Verified pros for every home & office problem.
           </p>
         </div>
       </div>

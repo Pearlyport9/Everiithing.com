@@ -233,7 +233,7 @@ export default function BookServiceView() {
         },
         customizations: {
           title: 'Everiithing\u2022com',
-          description: selectedSubService?.name ?? 'Home Service Booking',
+          description: selectedSubService?.name ?? 'Home & Office Service Booking',
         },
         meta: {
           booking_id: booking.id,

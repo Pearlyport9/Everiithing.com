@@ -12,7 +12,7 @@ const categories = [
   { name: 'AC Services', slug: 'ac-services', description: 'Installation, repair, and servicing' },
   { name: 'Generator & Inverter', slug: 'generator-inverter', description: 'Repair and maintenance' },
   { name: 'Painting', slug: 'painting', description: 'Interior and exterior painting' },
-  { name: 'Deep Cleaning', slug: 'deep-cleaning', description: 'Professional home cleaning' },
+    { name: 'Deep Cleaning', slug: 'deep-cleaning', description: 'Professional home & office cleaning' },
   { name: 'Carpentry', slug: 'carpentry', description: 'Furniture, shelves, and woodwork' },
 ]
 
@@ -82,14 +82,14 @@ export default function ServicesPage() {
             className="text-4xl md:text-5xl font-display font-extrabold leading-none"
             style={{ color: 'var(--md-on-background)' }}
           >
-            Home services for every need
+            Home & office services for every need
           </h1>
           <p
             className="text-base md:text-lg leading-relaxed mt-2 mx-auto"
             style={{ color: 'var(--md-on-surface-variant)' }}
           >
             <span className="lg:hidden">Trusted pros, every time.</span>
-            <span className="hidden lg:inline">Every home needs a trusted pro</span>
+            <span className="hidden lg:inline">Every home & office needs a trusted pro</span>
           </p>
         </div>
 
@@ -184,7 +184,7 @@ export default function ServicesPage() {
       <div className="absolute inset-0" style={{ backgroundColor: 'var(--md-on-background)', opacity: 0.78 }} />
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 text-center">
           <h2 className="text-2xl md:text-3xl lg:text-5xl font-display font-bold text-white leading-tight">
-            Stop Gambling with Your Home
+            Stop Gambling with Your Home or Office
           </h2>
           <p className="text-white/80 text-sm md:text-base mt-2 mx-auto" style={{ maxWidth: '480px' }}>
             <span className="md:hidden">Verified pros, zero stress.</span>

@@ -36,7 +36,7 @@ export default function HomePage() {
             className="text-5xl sm:text-5xl md:text-6xl font-display font-extrabold leading-[1.1] max-w-4xl mx-auto"
             style={{ color: 'var(--md-on-surface)' }}
           >
-            Professional home service<br />you can finally trust
+            Professional home & office service<br />you can finally trust
           </h1>
 
           <p
@@ -273,7 +273,7 @@ export default function HomePage() {
         <div className="absolute inset-0" style={{ backgroundColor: 'var(--md-on-background)', opacity: 0.78 }} />
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 text-center">
           <h2 className="text-2xl md:text-3xl lg:text-5xl font-display font-bold text-white leading-tight">
-            Stop Gambling with Your Home
+            Stop Gambling with Your Home or Office
           </h2>
           <p className="text-white/80 text-sm md:text-base mt-2 mx-auto" style={{ maxWidth: '480px' }}>
             <span className="md:hidden">Verified pros, zero stress.</span>

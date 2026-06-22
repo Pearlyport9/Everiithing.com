@@ -99,7 +99,7 @@ export default async function DashboardView() {
             Welcome, {firstName}!
           </h1>
           <p className="text-sm mt-1" style={{ color: 'var(--color-onSurfaceVariant)' }}>
-            Manage your home service bookings in one place
+            Manage your home & office service bookings in one place
           </p>
         </div>
 

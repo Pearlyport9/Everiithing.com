@@ -178,7 +178,7 @@ export async function POST(
           </p>
 
           <hr style="border: none; border-top: 1px solid #eee; margin-bottom: 16px;" />
-          <p style="font-size: 12px; color: #999; margin: 0;">Everiithing — Home Services, Made Simple</p>
+          <p style="font-size: 12px; color: #999; margin: 0;">Everiithing — Home & Office Services, Made Simple</p>
         </div>
       `,
     })
