@@ -36,7 +36,7 @@ export default function HomePage() {
             className="text-5xl sm:text-5xl md:text-6xl font-display font-extrabold leading-[1.1] max-w-4xl mx-auto"
             style={{ color: 'var(--md-on-surface)' }}
           >
-            Professional home & office service<br />you can finally trust
+            Home & office pros<br />you can trust
           </h1>
 
           <p

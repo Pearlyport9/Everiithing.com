@@ -131,7 +131,7 @@ export default function AboutPage() {
             }}
           >
             <span className="lg:hidden">Lagos&apos;s trusted marketplace.</span>
-            <span className="hidden lg:inline">The story behind Lagos&apos;s most trusted home & office services marketplace</span>
+            <span className="hidden lg:inline">Lagos&apos;s trusted home & office marketplace</span>
           </p>
         </div>
       </section>
