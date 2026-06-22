@@ -33,7 +33,7 @@ export default function HomePage() {
       <section className="lg:min-h-screen" style={{ backgroundColor: 'var(--md-surface)' }}>
         <div className="max-w-7xl mx-auto px-6 md:px-8 pt-6 md:pt-20 lg:pt-28 pb-12 text-center">
           <h1
-            className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold leading-[1.1] max-w-4xl mx-auto"
+            className="text-6xl font-display font-extrabold leading-[1.1] max-w-4xl mx-auto"
             style={{ color: 'var(--md-on-surface)' }}
           >
             <span className="block md:inline">Home & office pros</span>{' '}<span className="block md:inline">you can trust</span>
