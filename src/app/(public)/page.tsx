@@ -36,7 +36,7 @@ export default function HomePage() {
             className="text-4xl md:text-5xl lg:text-6xl font-display font-extrabold leading-[1.1] max-w-4xl mx-auto"
             style={{ color: 'var(--md-on-surface)' }}
           >
-            Home & office pros you can trust
+            <span className="block md:inline">Home & office pros</span>{' '}<span className="block md:inline">you can trust</span>
           </h1>
 
           <p

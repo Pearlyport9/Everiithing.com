@@ -82,7 +82,7 @@ export default function ServicesPage() {
             className="text-4xl md:text-5xl font-display font-extrabold leading-none"
             style={{ color: 'var(--md-on-background)' }}
           >
-            Home & office services for every need
+            Home & office services
           </h1>
           <p
             className="text-base md:text-lg leading-relaxed mt-2 mx-auto"
