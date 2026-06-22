@@ -39,7 +39,8 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
   const [booking, setBooking] = useState<BookingDetail | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [actionLoading, setActionLoading] = useState(false)
+  const [isAccepting, setIsAccepting] = useState(false)
+  const [isRejecting, setIsRejecting] = useState(false)
   const [actionError, setActionError] = useState('')
   const [paymentPending, setPaymentPending] = useState(false)
   const { sdkLoaded, openCheckout } = useFlutterwaveCheckout()
@@ -138,7 +139,8 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
       if (data) {
         setBooking(data as unknown as BookingDetail)
         if (data.status === 'confirmed') {
-          setActionLoading(false)
+          setIsAccepting(false)
+          setIsRejecting(false)
           setPaymentPending(false)
           if (pollingRef.current) {
             clearInterval(pollingRef.current)
@@ -160,7 +162,8 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
       if (attempts >= 6) {
         clearInterval(interval)
         pollingRef.current = null
-        setActionLoading(false)
+        setIsAccepting(false)
+        setIsRejecting(false)
         setPaymentPending(false)
       }
     }, 2500)
@@ -169,7 +172,7 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
 
   const handleQuoteResponse = async (action: 'accept' | 'reject') => {
     if (!booking) return
-    setActionLoading(true)
+    action === 'accept' ? setIsAccepting(true) : setIsRejecting(true)
     setActionError('')
     try {
       const res = await fetch(`/api/bookings/${booking.id}/quote-response`, {
@@ -180,19 +183,19 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
       const json = await res.json()
       if (!json.success) {
         setActionError(json.error?.message || `Failed to ${action} quote.`)
-        setActionLoading(false)
+        action === 'accept' ? setIsAccepting(false) : setIsRejecting(false)
         return
       }
 
       if (action === 'reject') {
         setBooking((prev) => prev ? { ...prev, status: 'cancelled' } : prev)
-        setActionLoading(false)
+        setIsRejecting(false)
         return
       }
 
       if (!json.data.requires_payment) {
         setBooking((prev) => prev ? { ...prev, status: 'confirmed' } : prev)
-        setActionLoading(false)
+        setIsAccepting(false)
         return
       }
 
@@ -201,13 +204,13 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
         setActionError('Not authenticated.')
-        setActionLoading(false)
+        setIsAccepting(false)
         return
       }
 
       if (!sdkLoaded) {
         setActionError('Payment system not ready. Please refresh and try again.')
-        setActionLoading(false)
+        setIsAccepting(false)
         return
       }
 
@@ -237,7 +240,7 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
       })
     } catch {
       setActionError('Network error. Please try again.')
-      setActionLoading(false)
+      action === 'accept' ? setIsAccepting(false) : setIsRejecting(false)
     }
   }
 
@@ -332,11 +335,11 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                       <button
                         onClick={() => handleQuoteResponse('accept')}
-                        disabled={actionLoading}
+                        disabled={isAccepting || isRejecting}
                         className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
                         style={{ backgroundColor: 'var(--color-primary)', color: 'var(--color-onPrimary)' }}
                       >
-                        {actionLoading ? (
+                        {isAccepting ? (
                           <Loader2 size={16} className="animate-spin" />
                         ) : (
                           <CheckCircle size={16} />
@@ -345,11 +348,11 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
                       </button>
                       <button
                         onClick={() => handleQuoteResponse('reject')}
-                        disabled={actionLoading}
+                        disabled={isAccepting || isRejecting}
                         className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
                         style={{ backgroundColor: 'var(--color-error)', color: 'var(--color-onError)' }}
                       >
-                        {actionLoading ? (
+                        {isRejecting ? (
                           <Loader2 size={16} className="animate-spin" />
                         ) : (
                           <XCircle size={16} />
