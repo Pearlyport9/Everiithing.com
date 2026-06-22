@@ -449,7 +449,7 @@ export default function BookServiceView() {
                 Select the specific service
               </p>
               <p className="text-sm text-[--md-on-surface-variant] mt-1 mb-4 md:mb-6 leading-relaxed max-w-prose">
-                Prices shown are call-out fees &mdash; they cover a vetted provider&apos;s visit and assessment, and count toward your final bill. Any materials or extra work are quoted after inspection, and you approve before anything proceeds.
+                Prices shown are call-out fees &mdash; they cover a vetted provider&apos;s visit and assessment, and count toward your final bill. Any materials or extra work are quoted after inspection, and you approve before anything proceeds. The call-out fee covers the provider&apos;s visit and is non-refundable, even if you choose not to proceed after the quote.
               </p>
 
               {loadingSubServices ? (
@@ -797,7 +797,10 @@ export default function BookServiceView() {
                 </span>
               </div>
             </div>
-            <div className="flex justify-between mt-8">
+            <p className="text-xs text-[--md-on-surface-variant] mt-6 mb-2 text-center">
+              Your call-out fee is non-refundable &mdash; it pays for the provider&apos;s visit and assessment.
+            </p>
+            <div className="flex justify-between">
               <Button variant="secondary" onClick={handleBack}>Back</Button>
               <Button variant="primary" onClick={handleSubmit} disabled={submitting || !sdkLoaded}>
                 {submitting ? 'Submitting...' : !sdkLoaded ? 'Loading payment...' : 'Confirm & Pay'}
