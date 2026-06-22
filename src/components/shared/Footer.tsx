@@ -31,7 +31,7 @@ export default function Footer() {
           aria-label="Home"
           className="self-start lg:self-auto flex items-center"
         >
-          <img src="/logo.svg" alt="Everiithing" width={32} height={32} className="h-8 w-auto" />
+          <img src="/footer-logo.svg" alt="Everiithing" width={32} height={32} className="h-8 w-auto" />
         </Link>
 
         <nav className="hidden lg:flex lg:flex-row lg:gap-8" aria-label="Footer navigation">
