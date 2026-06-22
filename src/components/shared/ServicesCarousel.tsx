@@ -171,7 +171,7 @@ export default function ServicesCarousel() {
             className="mx-auto mt-2"
             style={{ color: 'var(--md-on-surface-variant)' }}
           >
-            Verified pros for every home & office problem.
+            Pros for your home & office.
           </p>
         </div>
       </div>

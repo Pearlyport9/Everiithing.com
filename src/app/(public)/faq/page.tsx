@@ -450,8 +450,8 @@ export default function FAQPage() {
         />
         <div className="absolute inset-0" style={{ backgroundColor: 'var(--md-on-background)', opacity: 0.78 }} />
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 text-center">
-          <h2 className="text-2xl md:text-3xl lg:text-5xl font-display font-bold text-white leading-tight">
-            Stop Gambling with Your Home or Office
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-white leading-tight">
+            End the Home & Office Gamble
           </h2>
           <p className="text-white/80 text-sm md:text-base mt-2 mx-auto" style={{ maxWidth: '480px' }}>
             <span className="md:hidden">Verified pros, zero stress.</span>
