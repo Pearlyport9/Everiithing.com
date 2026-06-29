@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Modal } from '@/components/ui/Modal'
-import { Loader2, CheckCircle, XCircle, ExternalLink } from 'lucide-react'
+import { Loader2, CheckCircle, XCircle, ExternalLink, FileDown } from 'lucide-react'
 import type { Booking } from '@/types'
 import { useFlutterwaveCheckout } from '@/lib/flutterwave/useFlutterwaveCheckout'
 
@@ -43,6 +43,7 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
   const [isRejecting, setIsRejecting] = useState(false)
   const [actionError, setActionError] = useState('')
   const [paymentPending, setPaymentPending] = useState(false)
+  const [pdfLoading, setPdfLoading] = useState(false)
   const { sdkLoaded, openCheckout } = useFlutterwaveCheckout()
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
@@ -244,6 +245,33 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
     }
   }
 
+  const handleDownloadPdf = async () => {
+    if (!booking) return
+    setPdfLoading(true)
+    try {
+      const { generateBookingPdf } = await import('@/lib/pdf/generateBookingPdf')
+      generateBookingPdf({
+        id: booking.id,
+        serviceName,
+        status: booking.status,
+        created_at: booking.created_at,
+        scheduled_date: booking.scheduled_date,
+        scheduled_time: booking.scheduled_time,
+        customerName: null,
+        address: booking.address,
+        lga: booking.lga,
+        price_ngn: booking.price_ngn,
+        quoted_total_ngn: booking.quoted_total_ngn,
+        topup_owed_ngn: booking.topup_owed_ngn,
+        quote_notes: booking.quote_notes,
+        providerName,
+      })
+    } catch {
+      // silently fail
+    }
+    setPdfLoading(false)
+  }
+
   const statusLabel = (s: string) => {
     const labels: Record<string, string> = {
       pending: 'Pending', pending_quote: 'Awaiting Quote', confirmed: 'Confirmed',
@@ -283,12 +311,27 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
                 {formatDate(booking.scheduled_date)} at {booking.scheduled_time}
               </p>
             </div>
-            <span
-              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize shrink-0"
-              style={{ backgroundColor: 'var(--color-surfaceContainerLow)', color: statusColor(booking.status) }}
-            >
-              {statusLabel(booking.status)}
-            </span>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={handleDownloadPdf}
+                disabled={pdfLoading}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition-all duration-200 hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed border"
+                style={{
+                  backgroundColor: 'var(--color-surfaceContainerLow)',
+                  borderColor: 'var(--color-outlineVariant)',
+                  color: 'var(--color-onSurfaceVariant)',
+                }}
+              >
+                <FileDown size={12} />
+                {pdfLoading ? 'Downloading...' : 'PDF'}
+              </button>
+              <span
+                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize"
+                style={{ backgroundColor: 'var(--color-surfaceContainerLow)', color: statusColor(booking.status) }}
+              >
+                {statusLabel(booking.status)}
+              </span>
+            </div>
           </div>
 
           <div className="space-y-3">

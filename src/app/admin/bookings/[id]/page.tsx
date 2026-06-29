@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Loader2, CheckCircle, AlertCircle, Send, Save } from 'lucide-react'
+import { ArrowLeft, Loader2, CheckCircle, AlertCircle, Send, Save, FileDown } from 'lucide-react'
 import { StatusBadge } from '@/components/ui/StatusBadge'
 
 interface BookingDetail {
@@ -60,6 +60,7 @@ export default function AdminBookingDetailPage() {
   const [completing, setCompleting] = useState(false)
   const [completeError, setCompleteError] = useState('')
   const [completeSuccess, setCompleteSuccess] = useState('')
+  const [pdfLoading, setPdfLoading] = useState(false)
 
   useEffect(() => {
     if (!id) return
@@ -236,6 +237,32 @@ export default function AdminBookingDetailPage() {
     setCompleting(false)
   }
 
+  const handleDownloadPdf = async () => {
+    setPdfLoading(true)
+    try {
+      const { generateBookingPdf } = await import('@/lib/pdf/generateBookingPdf')
+      generateBookingPdf({
+        id: booking!.id,
+        serviceName,
+        status: booking!.status,
+        created_at: booking!.created_at,
+        scheduled_date: booking!.scheduled_date,
+        scheduled_time: booking!.scheduled_time,
+        customerName,
+        address: booking!.address,
+        lga: booking!.lga,
+        price_ngn: booking!.price_ngn,
+        quoted_total_ngn: booking!.quoted_total_ngn,
+        topup_owed_ngn: booking!.topup_owed_ngn,
+        quote_notes: booking!.quote_notes,
+        providerName,
+      })
+    } catch {
+      // silently fail
+    }
+    setPdfLoading(false)
+  }
+
   if (loading) {
     return (
       <div className="rounded-2xl p-6 md:p-8" style={{ backgroundColor: 'var(--color-surfaceContainerLowest)', boxShadow: '0 1px 4px rgba(13, 16, 33, 0.03)' }}>
@@ -295,7 +322,22 @@ export default function AdminBookingDetailPage() {
             </p>
           )}
         </div>
-        <StatusBadge status={booking.status as any} />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleDownloadPdf}
+            disabled={pdfLoading}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed border"
+            style={{
+              backgroundColor: 'var(--color-surfaceContainerLow)',
+              borderColor: 'var(--color-outlineVariant)',
+              color: 'var(--color-onSurfaceVariant)',
+            }}
+          >
+            <FileDown size={14} />
+            {pdfLoading ? 'Downloading...' : 'Download PDF'}
+          </button>
+          <StatusBadge status={booking.status as any} />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
