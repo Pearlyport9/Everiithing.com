@@ -261,9 +261,9 @@ export function BookingDetailModal({ bookingId, onClose }: BookingDetailModalPro
         address: booking.address,
         lga: booking.lga,
         price_ngn: booking.price_ngn,
-        quoted_total_ngn: booking.quoted_total_ngn,
-        topup_owed_ngn: booking.topup_owed_ngn,
-        quote_notes: booking.quote_notes,
+        quoted_total_ngn: booking.quoted_total_ngn ?? null,
+        topup_owed_ngn: booking.topup_owed_ngn ?? null,
+        quote_notes: booking.quote_notes ?? null,
         providerName,
       })
     } catch {
