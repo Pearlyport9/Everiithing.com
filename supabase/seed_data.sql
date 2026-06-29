@@ -10,7 +10,7 @@ INSERT INTO service_categories (name, slug, description, sort_order) VALUES
   ('Plumbing',             'plumbing',            'Fix leaks, unblock drains, install fixtures',               1),
   ('Electrical',          'electrical',          'Sockets, wiring, lighting, circuit breakers',               2),
   ('AC Services',         'ac-services',         'Installation, repair, servicing, gas refill',               3),
-  ('Generator & Inverter','generator-inverter',   'Repair, install, maintain generators and inverters',        4),
+  ('Generator, Inverter & Solar','generator-inverter',   'Repair, install, maintain generators, inverters, and solar systems',        4),
   ('Painting',            'painting',            'Interior, exterior, touch-ups, wallpaper',                  5),
   ('Deep Cleaning',       'deep-cleaning',       'Full house, kitchen, bathroom, move-in/out cleaning',       6),
   ('Carpentry',           'carpentry',           'Furniture assembly, shelving, doors, cabinets',             7)

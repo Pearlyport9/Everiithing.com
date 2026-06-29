@@ -10,7 +10,7 @@ const categories = [
   { name: 'Plumbing', slug: 'plumbing', description: 'Fixing leaks, pipes, and water systems' },
   { name: 'Electrical', slug: 'electrical', description: 'Wiring, switches, and electrical repairs' },
   { name: 'AC Services', slug: 'ac-services', description: 'Installation, repair, and servicing' },
-  { name: 'Generator & Inverter', slug: 'generator-inverter', description: 'Repair and maintenance' },
+  { name: 'Generator, Inverter & Solar', slug: 'generator-inverter', description: 'Repair and maintenance' },
   { name: 'Painting', slug: 'painting', description: 'Interior and exterior painting' },
     { name: 'Deep Cleaning', slug: 'deep-cleaning', description: 'Professional home & office cleaning' },
   { name: 'Carpentry', slug: 'carpentry', description: 'Furniture, shelves, and woodwork' },

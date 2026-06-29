@@ -11,7 +11,7 @@ const services = [
   { name: 'Plumbing', slug: 'plumbing', description: 'Faucets, pipes, water heaters — we fix it all.' },
   { name: 'Electrical', slug: 'electrical', description: 'Wiring, switches, installations by licensed electricians.' },
   { name: 'AC Services', slug: 'ac-services', description: 'Installation, repair & maintenance for all AC units.' },
-  { name: 'Generator & Inverter', slug: 'generator-inverter', description: 'Power backup solutions installation & repairs.' },
+  { name: 'Generator, Inverter & Solar', slug: 'generator-inverter', description: 'Power backup solutions installation & repairs.' },
   { name: 'Painting', slug: 'painting', description: 'Interior & exterior painting for homes and offices.' },
   { name: 'Deep Cleaning', slug: 'deep-cleaning', description: 'Thorough cleaning services for every space.' },
   { name: 'Carpentry', slug: 'carpentry', description: 'Custom furniture, repairs, and woodwork.' },

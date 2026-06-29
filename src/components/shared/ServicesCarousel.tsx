@@ -7,7 +7,7 @@ const services = [
   'Plumbing Repair',
   'Electrical Services',
   'AC & Cooling',
-  'Generator & Inverter',
+  'Generator, Inverter & Solar',
   'Deep Cleaning',
   'Painting',
   'Carpentry',
